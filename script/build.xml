@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<project name="scala-ant-project" basedir=".." default="build"  xmlns:artifact="antlib:org.apache.maven.artifact.ant">
+
+	<artifact:remoteRepository id="scala-repo" 
+				url="http://scala-tools.org/repo-releases" />
+	<artifact:dependencies pathId="scala.classpath">
+		<dependency groupId="org.scala-lang"
+				    artifactId="scala-library" 
+					version="2.7.1" />
+		<dependency groupId="org.scala-lang"
+				    artifactId="scala-compiler" 
+					version="2.7.1" />
+		<remoteRepository refid="scala-repo" />
+	</artifact:dependencies>
+
+	<artifact:dependencies pathId="dependency.classpath">
+		<dependency groupId="junit" 
+					artifactId="junit"
+					version="3.8.2" 
+					scope="test"/>
+		<dependency groupId="javax.servlet" 
+					artifactId="servlet-api" 
+					version="2.4" 
+					scope="provided" />
+		<dependency groupId="org.mortbay.jetty"
+					artifactId="jetty-ant"
+					version="6.1.11" />
+	</artifact:dependencies>
+
+	<taskdef resource="scala/tools/ant/antlib.xml">
+  		<classpath refid="scala.classpath"/>
+	</taskdef>
+	
+	<target name="init">
+	</target>
+
+	<target name="build" depends="init">
+		<javac destdir="target" source="1.5" target="1.5" debug="true"
+ 			   deprecation="false" optimize="false" failonerror="true"
+               encoding="UTF-8">
+			   <src path="src" />
+			   <classpath refid="dependency.classpath" />
+		</javac>	
+		<scalac srcdir="src" destdir="target" force="changed">
+      		<include name="**/*.scala"/>
+			<classpath refid="dependency.classpath" />
+			<classpath refid="scala.classpath" />
+    	</scalac>
+	</target>
+
+	<target name="run">
+		<jetty />
+	</target>
+
+</project>
+
