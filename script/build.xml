@@ -35,6 +35,7 @@
 	</target>
 
 	<target name="build" depends="init">
+		<mkdir dir="target" />
 		<javac destdir="target" source="1.5" target="1.5" debug="true"
  			   deprecation="false" optimize="false" failonerror="true"
                encoding="UTF-8">
