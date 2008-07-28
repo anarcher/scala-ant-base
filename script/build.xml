@@ -22,16 +22,20 @@
 					artifactId="servlet-api" 
 					version="2.4" 
 					scope="provided" />
-		<dependency groupId="org.mortbay.jetty"
-					artifactId="jetty-ant"
-					version="6.1.11" />
 	</artifact:dependencies>
 
 	<taskdef resource="scala/tools/ant/antlib.xml">
   		<classpath refid="scala.classpath"/>
 	</taskdef>
+
+	<import file="jetty.xml" />
 	
 	<target name="init">
+	</target>
+
+	<target name="clean" depends="init">
+		<delete dir="target/" />
+		<delete dir="tmp/" />
 	</target>
 
 	<target name="build" depends="init">
@@ -41,6 +45,7 @@
                encoding="UTF-8">
 			   <src path="src" />
 			   <classpath refid="dependency.classpath" />
+			   <classpath refid="scala.classpath" />
 		</javac>	
 		<scalac srcdir="src" destdir="target" force="changed">
       		<include name="**/*.scala"/>
@@ -50,7 +55,12 @@
 	</target>
 
 	<target name="run">
-		<jetty />
+		<jetty-start 
+			webapp-name="webapp" 
+			webapp-dir="webapp/"
+			envXml="jetty.env.xml"
+			port="9090"
+	 	/>
 	</target>
 
 </project>
