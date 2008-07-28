@@ -49,9 +49,7 @@
 			<jetty  
 				tempDirectory="tmp/@{webapp-name}">
 			  <systemProperties>
-			<!--
-				<systemProperty name="jetty.home" value="server/jetty"/>
-			-->
+				<systemProperty name="jetty.home" value="webapp/"/>
 				<systemProperty name="catalina.home" value=".."/>
 				<systemProperty name="jetty.port" value="@{port}" />
 			  </systemProperties>
