@@ -64,7 +64,7 @@
 					jettyEnvXml="script/@{envXml}">
 						<scanTargets dir="target">
 						</scanTargets>
-						<classes dir="target" includes="*.class" />
+						<classes dir="target/classes" includes="*.class" />
 						<!--
 						<classes dir="@{webapp-dir}WEB-INF/classes"  />
 						-->

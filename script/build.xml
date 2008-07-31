@@ -10,6 +10,10 @@
 		<dependency groupId="org.scala-lang"
 				    artifactId="scala-compiler" 
 					version="2.7.1" />
+        <dependency groupId="org.specs"
+		            artifactId="specs" 
+				    version="1.3.1" 
+			        scope="test" />
 		<remoteRepository refid="scala-repo" />
 	</artifact:dependencies>
 
@@ -31,6 +35,8 @@
 	<import file="jetty.xml" />
 	
 	<target name="init">
+        <mkdir dir="target/classes" />
+		<mkdir dir="target/specs" />
 	</target>
 
 	<target name="clean" depends="init">
@@ -38,21 +44,43 @@
 		<delete dir="tmp/" />
 	</target>
 
-	<target name="build" depends="init">
-		<mkdir dir="target" />
-		<javac destdir="target" source="1.5" target="1.5" debug="true"
- 			   deprecation="false" optimize="false" failonerror="true"
-               encoding="UTF-8">
-			   <src path="src" />
-			   <classpath refid="dependency.classpath" />
-			   <classpath refid="scala.classpath" />
-		</javac>	
-		<scalac srcdir="src" destdir="target" force="changed">
-      		<include name="**/*.scala"/>
-			<classpath refid="dependency.classpath" />
-			<classpath refid="scala.classpath" />
-    	</scalac>
+    <target name="build" depends="init,build-scala,build-java">
 	</target>
+    <target name="build-java">
+		<javac destdir="target/classes" source="1.5" target="1.5" debug="true"
+ 	           deprecation="false" optimize="false" failonerror="true" encoding="UTF-8">
+        	<src path="src" />
+		    <classpath refid="dependency.classpath" />
+		    <classpath refid="scala.classpath" />
+		</javac>	
+   </target>
+   <target name="build-scala">
+		<scalac srcdir="src" destdir="target/classes" force="changed">
+      		<include name="**/*.scala"/>
+		    <classpath refid="dependency.classpath" />
+		    <classpath refid="scala.classpath" />
+   		</scalac>
+    </target>
+    <target name="build-specs">
+		<scalac srcdir="specs" destdir="target/specs" force="changed">
+      		<include name="**/*.scala"/>
+		    <classpath refid="dependency.classpath" />
+		    <classpath refid="scala.classpath" />
+   		</scalac>
+    </target>
+
+    <target name="run-spec" depends="build,build-specs" >
+        <property name="spec" value=""/>
+        <java classname="${spec}">  
+           <classpath>
+                <pathelement location="target/classes/" />
+                <pathelement location="target/specs/" />
+           </classpath>
+           <classpath refid="dependency.classpath" />
+		   <classpath refid="scala.classpath" />
+        </java>
+    </target>
+    <target name="spec" depends="run-spec" />
 
 	<target name="run">
 		<jetty-start 
